@@ -1,6 +1,7 @@
 import { Component , OnInit } from '@angular/core';
 import {User} from '../model/user';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -18,9 +19,16 @@ export class AuthComponent implements OnInit{
   password : String = "";
   passwordConf : String = "";
 
+
+  // On fait appel au constructeur 
+  constructor(private route : Router){}
+
   // Notre tableau d'objets utilisateurs récupéré à partir du localstorage
   tabUsers : any;
   idLastUser: number = 0;
+
+  // Utilisateur trouvé 
+  userFound:any;
 
   // Appel de la methode ngOnInit de l'interface oninit 
   ngOnInit() {
@@ -137,12 +145,14 @@ export class AuthComponent implements OnInit{
     else{
       // Retourne un objet s'il trouve dans le tableau tabUser un element qui a le meme email et le 
       // meme mot de passe que ce qui a été saisi par l'utilisateur 
-      let userFound = this.tabUsers.find((element:any) => element.email == this.email && element.password == this.password);
+      this.userFound = this.tabUsers.find((element:any) => element.email == this.email && element.password == this.password);
 
-      if(userFound){
+      if(this.userFound){
         // Le compte existe 
         this.verifierChamps("Félicitation!", "Authentifié avec succes", "success"); 
         this.viderChamps(); 
+        // this.route.navigate()
+        this.route.navigate(['contact', this.userFound.idUser]);
       }
       else{
         this.verifierChamps("Oups!", "Le compte n'exite pas", "error");  
