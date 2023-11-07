@@ -31,3 +31,24 @@
         </form>
     </div>
 </div>
+
+
+<div class="connexion mt-5">
+    <div class="container shadow py-3">
+        <h1 class="text-center fw-bold mb-5">Connectez-vous</h1>
+        <form action="">
+            <div class="mb-3">
+                <label for="emailInput" class="form-label">Adresse email:</label>
+                <input type="email" name="email" class="form-control" id="emailInput" [(ngModel)] = "email">
+            </div>
+            <div class="mb-3">
+                <label for="passwordInput" class="form-label">Mot de passe: </label>
+                <input type="password" name="password" class="form-control" id="passwordInput" [(ngModel)] = "password">
+            </div>
+            <div class="btn-auth text-center">
+                <button type="submit" class="btn btn-primary me-3" (click)="connexion()">Se connecter</button>
+
+            </div>
+        </form>
+    </div>
+</div>

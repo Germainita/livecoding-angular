@@ -60,11 +60,6 @@ export class AuthComponent implements OnInit{
 
   // Methode pour valider l'inscription 
   validerInscription(){
-    console.log(this.nom);
-    console.log(this.prenom);
-    console.log(this.email);
-    console.log(this.password);
-    console.log(this.passwordConf);
 
     const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
 
@@ -93,7 +88,21 @@ export class AuthComponent implements OnInit{
         password:  this.password,
         contacts: []
       }
-      this.verifierChamps('Felicitation!', 'Inscription reuissie', 'success');
+      let userExist = this.tabUsers.find((elemt:any)=> elemt.email == this.email);
+      // Avant insertion: 
+      console.log(this.tabUsers);
+
+      if (userExist){
+        // Est executé que si l'on trouve un compte avce le meme email que celui qui a été renseigné
+        this.verifierChamps('Erreur!', 'Cet email est déjà utilisé', 'error');
+      }
+      else {
+        // On crée le compte 
+        this.tabUsers.push(user);
+        localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+        this.verifierChamps('Felicitation!', 'Inscription reuissie', 'success');
+        this.viderChamps();
+      }
     }
   }
 
@@ -115,6 +124,31 @@ export class AuthComponent implements OnInit{
     });
     
     // 
+  }
+
+  // Methode pour se connecter 
+  connexion(){
+    if(this.tabUsers.length == 0){
+      this.verifierChamps("Oups!", "Le compte n'exite pas", "error"); 
+    }
+    else if (this.email == "" || this.password == ""){
+      this.verifierChamps("Oups!", "Veulliez remplir tous les champs", "error"); 
+    }
+    else{
+      // Retourne un objet s'il trouve dans le tableau tabUser un element qui a le meme email et le 
+      // meme mot de passe que ce qui a été saisi par l'utilisateur 
+      let userFound = this.tabUsers.find((element:any) => element.email == this.email && element.password == this.password);
+
+      if(userFound){
+        // Le compte existe 
+        this.verifierChamps("Félicitation!", "Authentifié avec succes", "success"); 
+        this.viderChamps(); 
+      }
+      else{
+        this.verifierChamps("Oups!", "Le compte n'exite pas", "error");  
+      }
+    }
+
   }
 }
 
