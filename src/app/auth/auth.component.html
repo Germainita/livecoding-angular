@@ -4,23 +4,33 @@
         <form action="">
             <div class="mb-3">
                 <label for="nameInput" class="form-label">Nom: </label>
-                <input type="text" name="name" class="form-control" id="nameInput" [(ngModel)] = "nom" >
+                <input type="text" name="name" class="form-control" id="nameInput" [(ngModel)] = "nom" (input)="verifNomFonction()">
+                <p class="text-danger">{{verifNom}}</p>
             </div>
             <div class="mb-3">
                 <label for="prenomInput" class="form-label">Prenom: </label>
                 <input type="text" name="prenom" class="form-control" id="prenomInput" [(ngModel)] = "prenom">
+                <p class="text-danger">{{verifPrenom}}</p>
             </div>
             <div class="mb-3">
                 <label for="emailInput" class="form-label">Adresse email:</label>
                 <input type="email" name="email" class="form-control" id="emailInput" [(ngModel)] = "email">
+                <p class="text-danger">{{verifEmail}}</p>
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="passwordInput" class="form-label">Mot de passe: </label>
-                <input type="password" name="password" class="form-control" id="passwordInput" [(ngModel)] = "password">
+                <input type="password" name="password" class="form-controlverifEmail" id="passwordInput" [(ngModel)] = "password">
+                <p class="text-danger">{{verifPassword }}</p>
+            </div> -->
+            <div class="mb-3">
+                <label for="passwordInput" class="form-label">Mot de passe : </label>
+                <input type="password" name="password" class="form-control" id="passwordInput" [(ngModel)] = "password" >
+                <p class="text-danger">{{verifPassword}}</p>
             </div>
             <div class="mb-3">
                 <label for="passwordInputConf" class="form-label">Confirmation de mot de passe: </label>
                 <input type="password" name="passwordConf" class="form-control" id="passwordInputConf" [(ngModel)] = "passwordConf">
+                <p class="text-danger">{{verifPasswordConf }}</p>
             </div>
             
             <div class="btn-auth text-center">

@@ -19,6 +19,13 @@ export class AuthComponent implements OnInit{
   password : String = "";
   passwordConf : String = "";
 
+  // Variables pour faire la vérifications
+  verifNom : String  =  "";
+  verifPrenom : String = "";
+  verifEmail : String = "";
+  verifPassword : String = "";
+  verifPasswordConf : String = "";
+
 
   // On fait appel au constructeur 
   constructor(private route : Router){}
@@ -65,53 +72,128 @@ export class AuthComponent implements OnInit{
     });
   }
 
+  verifNomFonction() {
+    if(this.nom == ""){
+      this.verifNom = "Veuillez renseigner votre nom";
+    }
+    else if (this.nom.length <2 ){
+      this.verifNom = "Veuillez donner un nom valide";
+    }
+    else {
+      this.verifNom = "";
+    }
+  }
+
 
   // Methode pour valider l'inscription 
   validerInscription(){
 
     const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
+    
+    // Premiere vérification avec sweetalert 
+    // if(this.nom == "" || this.prenom == "" || this.email == "" || this.password == "" || this.passwordConf == ""){
+    //   // Vérifie si les champ ne sonts pas vide 
+    //   this.verifierChamps("Erreur!", "Vueillez renseigner les champs", "error");
+    // }
+    // else if (!this.email.match(emailPattern)) {
+    //   // Vérifie si le format de l'email est correct 
+    //   this.verifierChamps("Erreur!", "Email invalide", "error");
+    // }
+    // else if (this.password.length < 5) {
+    //   // Vérifie si la longueur du mot de passe est >=5
+    //   this.verifierChamps("Erreur!", "Mot de passe doit être supérieur ou égal à 5", "error");
+    // }
+    // else if (this.password != this.passwordConf) {
+    //   // Vérifie si les deux mots de passe sont iidentiques
+    //   this.verifierChamps('Erreur!', 'Les deux mots de passe ne sont pas conforme', 'error');
+    // }
 
-    if(this.nom == "" || this.prenom == "" || this.email == "" || this.password == "" || this.passwordConf == ""){
-      // Vérifie si les champ ne sonts pas vide 
-      this.verifierChamps("Erreur!", "Vueillez renseigner les champs", "error");
+    // Vérification champs par champs
+    // if(this.nom == "" && this.prenom == "" && this.email == "" && this.password == "" && this.passwordConf == "") {
+    //   this.verifNom = "Veuillez renseigner votre nom";
+    //   this.verifPrenom = "Veuillez renseigner votre prenom";
+    //   this.verifEmail = "Veuillez renseigner votre email";
+    //   this.verifPassword = "Veuillez renseigner votre mot de passe";
+    //   this.verifPasswordConf = "Veuillez renseigner à nouveau votre mot de passe";
+    // }
+    // Verification du nom 
+    
+    this.verifNomFonction();
+
+    // Verification du prenom 
+    if(this.prenom == ""){
+      this.verifPrenom = "Veuillez renseigner votre prenom";
     }
-    else if (!this.email.match(emailPattern)) {
-      // Vérifie si le format de l'email est correct 
-      this.verifierChamps("Erreur!", "Email invalide", "error");
+    else if (this.prenom.length <2 ){
+      this.verifPrenom = "Veuillez donner un prenom valide";
     }
-    else if (this.password.length < 5) {
-      // Vérifie si la longueur du mot de passe est >=5
-      this.verifierChamps("Erreur!", "Mot de passe doit être supérieur ou égal à 5", "error");
+    else{
+      this.verifPrenom = "";
     }
-    else if (this.password != this.passwordConf) {
-      // Vérifie si les deux mots de passe sont iidentiques
-      this.verifierChamps('Erreur!', 'Les deux mots de passe ne sont pas conforme', 'error');
+
+    // Verification de  l'email 
+    if(this.email == ""){
+      this.verifEmail = "Veuillez renseigner votre email";
+    }
+    else if (!this.email.match(emailPattern) ){
+      this.verifEmail = "Veuillez donner un email valide";
     }
     else {
-      let user = {
-        idUser:  this.idLastUser + 1,
-        nom: this.nom,
-        prenom: this.prenom,
-        email: this.email,
-        password:  this.password,
-        contacts: []
-      }
-      let userExist = this.tabUsers.find((elemt:any)=> elemt.email == this.email);
-      // Avant insertion: 
-      console.log(this.tabUsers);
-
-      if (userExist){
-        // Est executé que si l'on trouve un compte avce le meme email que celui qui a été renseigné
-        this.verifierChamps('Erreur!', 'Cet email est déjà utilisé', 'error');
-      }
-      else {
-        // On crée le compte 
-        this.tabUsers.push(user);
-        localStorage.setItem("Users", JSON.stringify(this.tabUsers));
-        this.verifierChamps('Felicitation!', 'Inscription reuissie', 'success');
-        this.viderChamps();
-      }
+      this.verifEmail = "";
     }
+
+    // Verification du mot de passe 
+    if(this.password == ""){
+      this.verifPassword = "Veuillez renseigner votre mot de passe";
+    }
+    else if (this.password.length < 5 ){
+      this.verifPassword = "Veuillez donner un mot de passe valide";
+    }
+    else{
+      this.verifPassword = "";
+    }
+
+    // Verification du mot de passe 
+    if(this.passwordConf == ""){
+      this.verifPasswordConf = "Veuillez renseigner à nouveau votre mot de passe";
+    }
+    else if (this.password != this.passwordConf){
+      this.verifPasswordConf = "Veuillez donner un passwordConf valide";
+    }
+    else {
+      this.verifPasswordConf = "";
+    }
+    // else {
+    //   // On vide les champs de vérifications 
+    //   this.verifNom = "";
+    //   this.verifPrenom = "";
+    //   this.verifEmail = "";
+    //   this.verifPassword = "";
+    //   this.verifPasswordConf = "";
+    //   let user = {
+    //     idUser:  this.idLastUser + 1,
+    //     nom: this.nom,
+    //     prenom: this.prenom,
+    //     email: this.email,
+    //     password:  this.password,
+    //     contacts: []
+    //   }
+    //   let userExist = this.tabUsers.find((elemt:any)=> elemt.email == this.email);
+    //   // Avant insertion: 
+    //   console.log(this.tabUsers);
+
+    //   if (userExist){
+    //     // Est executé que si l'on trouve un compte avce le meme email que celui qui a été renseigné
+    //     this.verifierChamps('Erreur!', 'Cet email est déjà utilisé', 'error');
+    //   }
+    //   else {
+    //     // On crée le compte 
+    //     this.tabUsers.push(user);
+    //     localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+    //     this.verifierChamps('Felicitation!', 'Inscription reuissie', 'success');
+    //     this.viderChamps();
+    //   }
+    // }
   }
 
   // Methode pour annuler l'inscription
