@@ -34,6 +34,9 @@ export class AuthComponent implements OnInit{
   exactPasswordConf : boolean = false;
 
 
+  titleFrm:string="Inscrivez-vous";
+
+
 
   // On fait appel au constructeur 
   constructor(private route : Router){}
@@ -156,6 +159,40 @@ export class AuthComponent implements OnInit{
     }
   }
 
+  // Fonction de Verification de l'email pour la fonctionnalité connexion
+  verifEmailConFonction(){
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
+    this.exactEmailCon = false;
+    
+    if(this.emailCon == ""){
+      this.verifEmailCon = "Veuillez renseigner votre email";
+    }
+    else if (!this.emailCon.match(emailPattern) ){
+      this.verifEmailCon = "Veuillez donner un email valide";
+    }
+    else {
+      this.verifEmailCon = "";
+      this.exactEmailCon = true;
+    }
+  }
+
+  // Methode qui verifie la validité de l'email 
+  // Ne marche pas pour l'instant
+  verifAllEmailFonction(email:any, verifEmail:any, exactEmail:any){
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
+    exactEmail = false;
+    
+    if(email == ""){
+      verifEmail = "Veuillez renseigner votre email";
+    }
+    else if (!email.match(emailPattern) ){
+      verifEmail = "Veuillez donner un email valide";
+    }
+    else {
+      verifEmail = "";
+      exactEmail = true;
+    }
+  }
 
   // Verification du mot de passe 
   verifPasswordFonction(){
@@ -172,6 +209,22 @@ export class AuthComponent implements OnInit{
     }
   }
 
+  // Fonction de Verification de l'email pour la fonctionnalité connexion
+  verifPasswordConFonction(){
+    this.exactPasswordCon = false;
+    if(this.passwordCon == ""){
+      this.verifPasswordCon = "Veuillez renseigner votre mot de passe";
+    }
+    else if (this.passwordCon.length < 5 ){
+      this.verifPasswordCon = "Mot de passe doit être supérieur ou égal à 5";
+    }
+    else{
+      this.verifPasswordCon = "";
+      this.exactPasswordCon = true;
+    }
+  }
+
+
   
   // Verification du mot de passe confirmé
   verifPasswordConfFonction(){
@@ -187,6 +240,8 @@ export class AuthComponent implements OnInit{
       this.exactPasswordConf = true;
     }
   }
+
+  
 
 
   // Methode pour valider l'inscription 
@@ -331,6 +386,18 @@ export class AuthComponent implements OnInit{
       }
     }
   }
+// choix formulaire
+showFrmConnexion: boolean=true;
+
+afficherFrmConnexion(){
+  this.showFrmConnexion=!this.showFrmConnexion;
+  
+  // Opération ternaire qui prend la premiere valeur après le ? si la condition est vrai 
+  // ou la deuxième après les : si la condition est fausse 
+  this.showFrmConnexion == false ?  this.titleFrm="Connectez-Vous" :  this.titleFrm="Inscrivez-Vous";
+}
+
+
 }
 
 
