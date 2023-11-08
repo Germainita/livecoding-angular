@@ -28,6 +28,11 @@ export class AuthComponent implements OnInit{
 
   // Variables si les champs sont exacts
   exactNom : boolean = false;
+  exactPrenom : boolean = false;
+  exactEmail : boolean = false;
+  exactPassword : boolean = false;
+  exactPasswordConf : boolean = false;
+
 
 
   // On fait appel au constructeur 
@@ -39,6 +44,18 @@ export class AuthComponent implements OnInit{
 
   // Utilisateur trouvé 
   userFound:any;
+
+  // Variable pour la connexion 
+  emailCon : String = "";
+  passwordCon: String = "";
+
+  // Pour vérifier les champs pour la connexion 
+  verifEmailCon : String = "";
+  verifPasswordCon: String = "";
+
+  // Variables Si les valeurs sont exactes
+  exactEmailCon : boolean = false;
+  exactPasswordCon : boolean = false; 
 
 
   // Appel de la methode ngOnInit de l'interface oninit 
@@ -60,11 +77,26 @@ export class AuthComponent implements OnInit{
 
   // Methode pour vider les champs 
   viderChamps(){
+    // On vide les valeurs des champs input 
     this.nom = "";
     this.prenom = "";
     this.email = "";
     this.password = "";
     this.passwordConf = "";
+
+    // On vide les Variables qui permettent de faire la vérifications
+    this.verifNom = "";
+    this.verifPrenom = "";
+    this.verifEmail = "";
+    this.verifPassword = "";
+    this.verifPasswordConf = "";
+
+    // On vide les variables qui vérifient si les champs sont exacts
+    this.exactNom = false;
+    this.exactPrenom = false;
+    this.exactEmail = false;
+    this.exactPassword = false;
+    this.exactPasswordConf = false;
   }
 
   // Méthode pour afficher un sweetalert2 apres vérification 
@@ -93,6 +125,7 @@ export class AuthComponent implements OnInit{
 
   // Verification du prenom 
   verifPrenomFonction() {
+    this.exactPrenom = false;
     if(this.prenom == ""){
       this.verifPrenom = "Veuillez renseigner votre prenom";
     }
@@ -102,12 +135,14 @@ export class AuthComponent implements OnInit{
     }
     else{
       this.verifPrenom = "";
+      this.exactPrenom = true;
     }
   }
 
   // Verification de  l'email 
   verifEmailFonction(){
     const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
+    this.exactEmail = false;
     
     if(this.email == ""){
       this.verifEmail = "Veuillez renseigner votre email";
@@ -117,12 +152,14 @@ export class AuthComponent implements OnInit{
     }
     else {
       this.verifEmail = "";
+      this.exactEmail = true;
     }
   }
 
 
   // Verification du mot de passe 
   verifPasswordFonction(){
+    this.exactPassword = false;
     if(this.password == ""){
       this.verifPassword = "Veuillez renseigner votre mot de passe";
     }
@@ -131,12 +168,14 @@ export class AuthComponent implements OnInit{
     }
     else{
       this.verifPassword = "";
+      this.exactPassword = true;
     }
   }
 
   
   // Verification du mot de passe confirmé
   verifPasswordConfFonction(){
+    this.exactPasswordConf = false;
     if(this.passwordConf == ""){
       this.verifPasswordConf = "Veuillez renseigner à nouveau votre mot de passe";
     }
@@ -145,12 +184,44 @@ export class AuthComponent implements OnInit{
     }
     else {
       this.verifPasswordConf = "";
+      this.exactPasswordConf = true;
     }
   }
 
 
   // Methode pour valider l'inscription 
   validerInscription(){
+    // On fait appel au méthode qui permettent de vérifier les champs 
+    this.verifEmailFonction();
+    this.verifNomFonction();
+    this.verifPrenomFonction();
+    this.verifPasswordFonction();
+    this.verifPasswordConfFonction();
+
+    // Si les champs sont exacts, on ajoute le compte dans le tableau localStorage
+    if(this.exactNom && this.exactPrenom && this.exactEmail && this.exactPassword && this.exactPasswordConf){
+      let user = {
+        idUser:  this.idLastUser + 1,
+        nom: this.nom,
+        prenom: this.prenom,
+        email: this.email,
+        password:  this.password,
+        contacts: []
+      }
+      let userExist = this.tabUsers.find((elemt:any)=> elemt.email == this.email);
+
+      if (userExist){
+        // Est executé que si l'on trouve un compte avce le meme email que celui qui a été renseigné
+        this.verifierChamps('Erreur!', 'Cet email est déjà utilisé', 'error');
+      }
+      else {
+        // On crée le compte 
+        this.tabUsers.push(user);
+        localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+        this.verifierChamps('Felicitation!', 'Inscription reuissie', 'success');
+        this.viderChamps();
+      }
+    }
 
     // Premiere vérification avec sweetalert 
     // if(this.nom == "" || this.prenom == "" || this.email == "" || this.password == "" || this.passwordConf == ""){
@@ -215,6 +286,7 @@ export class AuthComponent implements OnInit{
     //   }
     // }
   }
+
 
   // Methode pour annuler l'inscription
   annulerInscription(){

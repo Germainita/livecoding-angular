@@ -6,27 +6,31 @@
                 <label for="nameInput" class="form-label">Nom: </label>
                 <input type="text" name="name" class="form-control" id="nameInput" [(ngModel)] = "nom" (input)="verifNomFonction()">
                 <p class="text-danger" *ngIf="!exactNom">{{verifNom}}</p>
-                <p class="text-success" *ngIf="exactNom">Le nom est valide</p>
+                <p class="text-success" *ngIf="exactNom"><i class="bi bi-check2-all"></i> Exact !</p>
             </div>
             <div class="mb-3">
                 <label for="prenomInput" class="form-label">Prenom: </label>
                 <input type="text" name="prenom" class="form-control" id="prenomInput" [(ngModel)] = "prenom" (input)="verifPrenomFonction()">
-                <p class="text-danger">{{verifPrenom}}</p>
+                <p class="text-danger" *ngIf="!exactPrenom">{{verifPrenom}}</p>
+                <p class="text-success" *ngIf="exactPrenom"><i class="bi bi-check2-all"></i> Exact !</p>
             </div>
             <div class="mb-3">
                 <label for="emailInput" class="form-label">Adresse email:</label>
                 <input type="email" name="email" class="form-control" id="emailInput" [(ngModel)] = "email" (input)="this.verifEmailFonction()">
-                <p class="text-danger">{{verifEmail}}</p>
+                <p class="text-danger" *ngIf="!exactEmail">{{verifEmail}}</p>
+                <p class="text-success" *ngIf="exactEmail"><i class="bi bi-check2-all"></i> Exact !</p>
             </div>
             <div class="mb-3">
                 <label for="passwordInput" class="form-label">Mot de passe : </label>
                 <input type="password" name="password" class="form-control" id="passwordInput" [(ngModel)] = "password" (input)="verifPasswordFonction()">
-                <p class="text-danger" >{{verifPassword}}</p>
+                <p class="text-danger" *ngIf="!exactPassword">{{verifPassword}}</p>
+                <p class="text-success" *ngIf="exactPassword"><i class="bi bi-check2-all"></i> Exact !</p>
             </div>
             <div class="mb-3">
                 <label for="passwordInputConf" class="form-label">Confirmation de mot de passe: </label>
                 <input type="password" name="passwordConf" class="form-control" id="passwordInputConf" [(ngModel)] = "passwordConf" (input)="verifPasswordConfFonction()">
-                <p class="text-danger">{{verifPasswordConf }}</p>
+                <p class="text-danger" *ngIf="!exactPasswordConf">{{verifPasswordConf}}</p>
+                <p class="text-success" *ngIf="exactPasswordConf"><i class="bi bi-check2-all"></i> Exact !</p>
             </div>
             
             <div class="btn-auth text-center">
@@ -45,15 +49,13 @@
         <form action="">
             <div class="mb-3">
                 <label for="emailInput" class="form-label">Adresse email:</label>
-                <input type="email" name="email" class="form-control" id="emailInput" [(ngModel)] = "email" (input)="this.verifEmailFonction()">
-                <!-- <p class="text-danger" *ngIf="!exactEmail">{{verifEmail}}</p> -->
-                <!-- <p class="text-success" *ngIf="exactEmail"><i class="bi bi-check2-all"></i> OK!</p> -->
+                <input type="email" name="email" class="form-control" id="emailInput" [(ngModel)] = "emailCon" (input)="this.verifEmailFonction()">
+                <p class="text-danger" *ngIf="!exactEmailCon">{{verifEmailCon}}</p>
+                <p class="text-success" *ngIf="exactEmailCon"><i class="bi bi-check2-all"></i> Exact !</p>
             </div>
             <div class="mb-3">
                 <label for="passwordInput" class="form-label">Mot de passe : </label>
-                <input type="password" name="password" class="form-control" id="passwordInput" [(ngModel)] = "password" (input)="verifPasswordFonction()">
-                <!-- <p class="text-danger" *ngIf="!exactPassword">{{verifPassword}}</p> -->
-                <!-- <p class="text-success" *ngIf="exactPassword"><i class="bi bi-check2-all"></i> OK!</p> -->
+                <input type="password" name="password" class="form-control" id="passwordInput" [(ngModel)] = "passwordCon" (input)="verifPasswordFonction()">
             </div>
             <div class="btn-auth text-center">
                 <button type="submit" class="btn btn-primary me-3" (click)="connexion()">Se connecter</button>
