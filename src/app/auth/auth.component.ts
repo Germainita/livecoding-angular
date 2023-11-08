@@ -82,7 +82,6 @@ export class AuthComponent implements OnInit{
 
   // Verification du nom
   verifNomFonction() {
-    this.exactNom = false;
     if(this.nom == ""){
       this.verifNom = "Veuillez renseigner votre nom";
     }
@@ -91,13 +90,11 @@ export class AuthComponent implements OnInit{
     }
     else {
       this.verifNom = "";
-      this.exactNom = true;
     }
   }
 
   // Verification du prenom 
   verifPrenomFonction() {
-    this.exactPrenom = false;
     if(this.prenom == ""){
       this.verifPrenom = "Veuillez renseigner votre prenom";
     }
@@ -107,13 +104,11 @@ export class AuthComponent implements OnInit{
     }
     else{
       this.verifPrenom = "";
-      this.exactPrenom = true;
     }
   }
 
   // Verification de  l'email 
   verifEmailFonction(){
-    this.exactEmail = false;
     const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
     
     if(this.email == ""){
@@ -124,7 +119,6 @@ export class AuthComponent implements OnInit{
     }
     else {
       this.verifEmail = "";
-      this.exactEmail = true;
     }
   }
 
@@ -132,7 +126,6 @@ export class AuthComponent implements OnInit{
   // Verification du mot de passe 
   verifPasswordFonction(){
     if(this.password == ""){
-      this.exactPassword = false;
       this.verifPassword = "Veuillez renseigner votre mot de passe";
     }
     else if (this.password.length < 5 ){
@@ -140,14 +133,12 @@ export class AuthComponent implements OnInit{
     }
     else{
       this.verifPassword = "";
-      this.exactPassword = true;
     }
   }
 
   
   // Verification du mot de passe confirmé
   verifPasswordConfFonction(){
-    this.exactPasswordConf = false;
     if(this.passwordConf == ""){
       this.verifPasswordConf = "Veuillez renseigner à nouveau votre mot de passe";
     }
@@ -156,7 +147,6 @@ export class AuthComponent implements OnInit{
     }
     else {
       this.verifPasswordConf = "";
-      this.exactPasswordConf = true;
     }
   }
 
@@ -193,47 +183,8 @@ export class AuthComponent implements OnInit{
     // Verification du nom 
     
     this.verifNomFonction();
-    this.verifPrenomFonction();
-    this.verifEmailFonction();
-    this.verifPasswordFonction();
-    this.verifPasswordConfFonction();
-    
-    if (this.exactNom && this.exactPrenom && this.exactEmail && this.exactPassword && this.exactPasswordConf){
-      let user = {
-        idUser:  this.idLastUser + 1,
-        nom: this.nom,
-        prenom: this.prenom,
-        email: this.email,
-        password:  this.password,
-        contacts: []
-      }
-
-      let userExist = this.tabUsers.find((elemt:any)=> elemt.email == this.email);
-
-      if (userExist){
-        // Est executé que si l'on trouve un compte avce le meme email que celui qui a été renseigné
-        this.verifierChamps('Erreur!', 'Cet email est déjà utilisé', 'error');
-      }
-      else {
-        // On crée le compte 
-        this.tabUsers.push(user);
-        localStorage.setItem("Users", JSON.stringify(this.tabUsers));
-        this.verifierChamps('Felicitation!', 'Inscription reuissie', 'success');
-        this.viderChamps();
-        this.exactNom   =  false;
-        this.exactPrenom  = false;
-        this.exactEmail  = false;
-        this.exactPassword  = false;
-        this.exactPasswordConf  = false;
-      }
-    }
-    
     
 
-    
-    
-
-    
     // else {
     //   // On vide les champs de vérifications 
     //   this.verifNom = "";
@@ -289,8 +240,6 @@ export class AuthComponent implements OnInit{
 
   // Methode pour se connecter 
   connexion(){
-    this.verifEmailFonction();
-    this.verifPasswordFonction();
     if(this.tabUsers.length == 0){
       this.verifierChamps("Oups!", "Le compte n'exite pas", "error"); 
     }
@@ -303,8 +252,6 @@ export class AuthComponent implements OnInit{
         // Le compte existe 
         this.verifierChamps("Félicitation!", "Authentifié avec succes", "success"); 
         this.viderChamps(); 
-        this.exactEmail  = false;
-        this.exactPassword  = false;
         // this.route.navigate()
         this.route.navigate(['contact', this.userFound.idUser]);
       }
