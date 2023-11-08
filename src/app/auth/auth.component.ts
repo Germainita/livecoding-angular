@@ -27,11 +27,7 @@ export class AuthComponent implements OnInit{
   verifPasswordConf : String = "";
 
   // Variables si les champs sont exacts
-  exactNom : boolean  =  false;
-  exactPrenom : boolean = false;
-  exactEmail : boolean = false;
-  exactPassword : boolean = false;
-  exactPasswordConf : boolean = false;
+  exactNom : boolean = false;
 
 
   // On fait appel au constructeur 
@@ -82,14 +78,16 @@ export class AuthComponent implements OnInit{
 
   // Verification du nom
   verifNomFonction() {
+    this.exactNom = false;
     if(this.nom == ""){
       this.verifNom = "Veuillez renseigner votre nom";
     }
-    else if (this.nom.length <2 ){
+    else if (this.nom.length < 2 ){
       this.verifNom = "Le nom est trop court";
     }
     else {
       this.verifNom = "";
+      this.exactNom = true;
     }
   }
 
@@ -143,7 +141,7 @@ export class AuthComponent implements OnInit{
       this.verifPasswordConf = "Veuillez renseigner à nouveau votre mot de passe";
     }
     else if (this.password != this.passwordConf){
-      this.verifPasswordConf = "Les deux mots de passe ne sont pas conforme";
+      this.verifPasswordConf = "Les deux mots de passe ne sont pas conformes";
     }
     else {
       this.verifPasswordConf = "";
@@ -182,7 +180,7 @@ export class AuthComponent implements OnInit{
     // }
     // Verification du nom 
     
-    this.verifNomFonction();
+    
     
 
     // else {
@@ -243,7 +241,8 @@ export class AuthComponent implements OnInit{
     if(this.tabUsers.length == 0){
       this.verifierChamps("Oups!", "Le compte n'exite pas", "error"); 
     }
-    else if (this.exactEmail && this.exactPassword){
+    else{
+    // else if (this.exactEmail && this.exactPassword){
       // Retourne un objet s'il trouve dans le tableau tabUser un element qui a le meme email et le 
       // meme mot de passe que ce qui a été saisi par l'utilisateur 
       this.userFound = this.tabUsers.find((element:any) => element.email == this.email && element.password == this.password);
