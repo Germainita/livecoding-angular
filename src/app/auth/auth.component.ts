@@ -26,6 +26,13 @@ export class AuthComponent implements OnInit{
   verifPassword : String = "";
   verifPasswordConf : String = "";
 
+  // Variables si les champs sont exacts
+  exactNom : boolean  =  false;
+  exactPrenom : boolean = false;
+  exactEmail : boolean = false;
+  exactPassword : boolean = false;
+  exactPasswordConf : boolean = false;
+
 
   // On fait appel au constructeur 
   constructor(private route : Router){}
@@ -36,6 +43,7 @@ export class AuthComponent implements OnInit{
 
   // Utilisateur trouvé 
   userFound:any;
+
 
   // Appel de la methode ngOnInit de l'interface oninit 
   ngOnInit() {
@@ -72,15 +80,83 @@ export class AuthComponent implements OnInit{
     });
   }
 
+  // Verification du nom
   verifNomFonction() {
+    this.exactNom = false;
     if(this.nom == ""){
       this.verifNom = "Veuillez renseigner votre nom";
     }
     else if (this.nom.length <2 ){
-      this.verifNom = "Veuillez donner un nom valide";
+      this.verifNom = "Le nom est trop court";
     }
     else {
       this.verifNom = "";
+      this.exactNom = true;
+    }
+  }
+
+  // Verification du prenom 
+  verifPrenomFonction() {
+    this.exactPrenom = false;
+    if(this.prenom == ""){
+      this.verifPrenom = "Veuillez renseigner votre prenom";
+    }
+    else if (this.prenom.length < 3 ){
+      this.verifPrenom = "Le prenom est trop court";
+      
+    }
+    else{
+      this.verifPrenom = "";
+      this.exactPrenom = true;
+    }
+  }
+
+  // Verification de  l'email 
+  verifEmailFonction(){
+    this.exactEmail = false;
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
+    
+    if(this.email == ""){
+      this.verifEmail = "Veuillez renseigner votre email";
+    }
+    else if (!this.email.match(emailPattern) ){
+      this.verifEmail = "Veuillez donner un email valide";
+    }
+    else {
+      this.verifEmail = "";
+      this.exactEmail = true;
+    }
+  }
+
+
+  // Verification du mot de passe 
+  verifPasswordFonction(){
+    if(this.password == ""){
+      this.exactPassword = false;
+      this.verifPassword = "Veuillez renseigner votre mot de passe";
+    }
+    else if (this.password.length < 5 ){
+      this.verifPassword = "Mot de passe doit être supérieur ou égal à 5";
+    }
+    else{
+      this.verifPassword = "";
+      this.exactPassword = true;
+    }
+  }
+
+  
+  // Verification du mot de passe confirmé
+  verifPasswordConfFonction(){
+    this.exactPasswordConf = false;
+    if(this.passwordConf == ""){
+      this.verifPasswordConf = "Veuillez renseigner à nouveau votre mot de passe";
+    }
+    else if (this.password != this.passwordConf){
+      this.verifPasswordConf = "Les deux mots de passe ne sont pas conforme";
+    }
+    else {
+      this.verifPasswordConf = "";
+      this.exactPasswordConf = true;
     }
   }
 
@@ -88,8 +164,6 @@ export class AuthComponent implements OnInit{
   // Methode pour valider l'inscription 
   validerInscription(){
 
-    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
-    
     // Premiere vérification avec sweetalert 
     // if(this.nom == "" || this.prenom == "" || this.email == "" || this.password == "" || this.passwordConf == ""){
     //   // Vérifie si les champ ne sonts pas vide 
@@ -119,50 +193,47 @@ export class AuthComponent implements OnInit{
     // Verification du nom 
     
     this.verifNomFonction();
+    this.verifPrenomFonction();
+    this.verifEmailFonction();
+    this.verifPasswordFonction();
+    this.verifPasswordConfFonction();
+    
+    if (this.exactNom && this.exactPrenom && this.exactEmail && this.exactPassword && this.exactPasswordConf){
+      let user = {
+        idUser:  this.idLastUser + 1,
+        nom: this.nom,
+        prenom: this.prenom,
+        email: this.email,
+        password:  this.password,
+        contacts: []
+      }
 
-    // Verification du prenom 
-    if(this.prenom == ""){
-      this.verifPrenom = "Veuillez renseigner votre prenom";
-    }
-    else if (this.prenom.length <2 ){
-      this.verifPrenom = "Veuillez donner un prenom valide";
-    }
-    else{
-      this.verifPrenom = "";
-    }
+      let userExist = this.tabUsers.find((elemt:any)=> elemt.email == this.email);
 
-    // Verification de  l'email 
-    if(this.email == ""){
-      this.verifEmail = "Veuillez renseigner votre email";
+      if (userExist){
+        // Est executé que si l'on trouve un compte avce le meme email que celui qui a été renseigné
+        this.verifierChamps('Erreur!', 'Cet email est déjà utilisé', 'error');
+      }
+      else {
+        // On crée le compte 
+        this.tabUsers.push(user);
+        localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+        this.verifierChamps('Felicitation!', 'Inscription reuissie', 'success');
+        this.viderChamps();
+        this.exactNom   =  false;
+        this.exactPrenom  = false;
+        this.exactEmail  = false;
+        this.exactPassword  = false;
+        this.exactPasswordConf  = false;
+      }
     }
-    else if (!this.email.match(emailPattern) ){
-      this.verifEmail = "Veuillez donner un email valide";
-    }
-    else {
-      this.verifEmail = "";
-    }
+    
+    
 
-    // Verification du mot de passe 
-    if(this.password == ""){
-      this.verifPassword = "Veuillez renseigner votre mot de passe";
-    }
-    else if (this.password.length < 5 ){
-      this.verifPassword = "Veuillez donner un mot de passe valide";
-    }
-    else{
-      this.verifPassword = "";
-    }
+    
+    
 
-    // Verification du mot de passe 
-    if(this.passwordConf == ""){
-      this.verifPasswordConf = "Veuillez renseigner à nouveau votre mot de passe";
-    }
-    else if (this.password != this.passwordConf){
-      this.verifPasswordConf = "Veuillez donner un passwordConf valide";
-    }
-    else {
-      this.verifPasswordConf = "";
-    }
+    
     // else {
     //   // On vide les champs de vérifications 
     //   this.verifNom = "";
@@ -218,13 +289,12 @@ export class AuthComponent implements OnInit{
 
   // Methode pour se connecter 
   connexion(){
+    this.verifEmailFonction();
+    this.verifPasswordFonction();
     if(this.tabUsers.length == 0){
       this.verifierChamps("Oups!", "Le compte n'exite pas", "error"); 
     }
-    else if (this.email == "" || this.password == ""){
-      this.verifierChamps("Oups!", "Veulliez remplir tous les champs", "error"); 
-    }
-    else{
+    else if (this.exactEmail && this.exactPassword){
       // Retourne un objet s'il trouve dans le tableau tabUser un element qui a le meme email et le 
       // meme mot de passe que ce qui a été saisi par l'utilisateur 
       this.userFound = this.tabUsers.find((element:any) => element.email == this.email && element.password == this.password);
@@ -233,6 +303,8 @@ export class AuthComponent implements OnInit{
         // Le compte existe 
         this.verifierChamps("Félicitation!", "Authentifié avec succes", "success"); 
         this.viderChamps(); 
+        this.exactEmail  = false;
+        this.exactPassword  = false;
         // this.route.navigate()
         this.route.navigate(['contact', this.userFound.idUser]);
       }
@@ -240,7 +312,6 @@ export class AuthComponent implements OnInit{
         this.verifierChamps("Oups!", "Le compte n'exite pas", "error");  
       }
     }
-
   }
 }
 
