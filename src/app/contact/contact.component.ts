@@ -24,7 +24,7 @@ export class ContactComponent implements OnInit {
   imageUrl:String="";
 
   // Identifiant du dernier element du tableau contact 
-  idLastContact: Number = 0;
+  idLastContact: number = 0;
 
   // Le tableau qui contient la liste des contacts de l'utiliateur qui s'est connecté 
   tabContactsUser:any;
@@ -82,7 +82,47 @@ export class ContactComponent implements OnInit {
       this.verifierChamps("Erreur!", "Email invalide", "error");
     }
     else{
-      alert("Bon!!")
+      // Création de l'objet contact 
+      let contact = {
+        idContact: this.idLastContact + 1,
+        nomContact: this.nom,
+        prenomContact: this.prenom,
+        emailContact: this.email,
+        telephoneContact: this.telephone,
+        descriptionContact: this.description,
+        imageContact: this.imageUrl,
+        etatContact: 1,
+        createAt: new Date(),
+        createBy: this.userConnect.email,
+        updateAt: "",
+        updateBy: "",        
+      }
+
+      // On ajoute l'objet dans la liste des contacts
+      this.tabContactsUser.push(contact);
+      this.verifierChamps("Felicitation!", "Contact ajouté avec succes", "success");
+
+      console.log(this.userConnect);
     }
   }
 }
+
+
+
+ // // Structure du tableau contact 
+  // contacts :any [] = [
+  //   {
+  //     idContact: 1,
+  //     nomContact: "",
+  //     prenomContact: "",
+  //     emailContact: "",
+  //     telephoneContact: "",
+  //     descriptionContact: "",
+  //     imageContact: "",
+  //     etatContact:1,
+  //     createAt: "",
+  //     createBy: "",
+  //     updateat: "",
+  //     updateBy: "",
+  //   }
+  // ]
