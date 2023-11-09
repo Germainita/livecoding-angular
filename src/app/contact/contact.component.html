@@ -1,1 +1,49 @@
 <p>Bien venuuu !!!!!!!</p>
+<!-- Button trigger modal pour ajouter un contact-->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Ajouter un contact
+</button>
+  
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Ajouter un contact</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="">
+                <div class="mb-3">
+                    <label for="nameInput" class="form-label">Nom: </label>
+                    <input type="text" name="name" class="form-control" id="nameInput" [(ngModel)] = "nom">
+                </div>
+                <div class="mb-3">
+                    <label for="prenomInput" class="form-label">Prenom: </label>
+                    <input type="text" name="prenom" class="form-control" id="prenomInput" [(ngModel)]="prenom">
+                </div>
+                <div class="mb-3">
+                    <label for="emailInput" class="form-label">Adresse email:</label>
+                    <input type="email" name="email" class="form-control" id="emailInput" [(ngModel)] ="email">
+                </div>
+                <div class="mb-3">
+                    <label for="telephoneInput" class="form-label">Numero de téléphone: </label>
+                    <input type="tel" name="telephone" class="form-control" id="telephoneInput" [(ngModel)] ="telephone">
+                </div>
+                <div class="mb-3">
+                    <label for="descriptionInput" class="form-label">Description: </label>
+                    <textarea class="form-control" name="description" id="descriptionInput" rows="3" [(ngModel)] ="description"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="imageInput" class="form-label">Url de l'image: </label>
+                    <input type="text" name="image" class="form-control" id="imageInput" [(ngModel)] = "imageUrl" >
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="ajouterContact()">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div>

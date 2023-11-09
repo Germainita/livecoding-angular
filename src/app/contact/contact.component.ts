@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-contact',
@@ -7,19 +8,33 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./contact.component.css']
 })
 export class ContactComponent implements OnInit {
-
-  // Définition du constructeur 
-  constructor (private route: ActivatedRoute){}
-
   // Déclaration des attriuts
-  // Attribut qui permet de récupérer l'identifiant de celui qui s'est connecté 
-  idUserConnect = this.route.snapshot.params['id'];
-
   // Attribut qui stock le tableau de notre localstorage
   tabUsers:any;
 
   // Attribut qui stock l'utilisateur qui s'est connecté 
   userConnect:any;
+
+  // Les attributs qui récupère les valeurs des champs pour ajouter un contact
+  nom:String = "";
+  prenom: String="";
+  telephone:String="";
+  email:String="";
+  description:String="";
+  imageUrl:String="";
+
+  // Identifiant du dernier element du tableau contact 
+  idLastContact: Number = 0;
+
+  // Le tableau qui contient la liste des contacts de l'utiliateur qui s'est connecté 
+  tabContactsUser:any;
+
+  // Définition du constructeur 
+  constructor (private route: ActivatedRoute){}
+  // Attribut qui permet de récupérer l'identifiant de celui qui s'est connecté 
+  idUserConnect = this.route.snapshot.params['id'];
+
+  
 
   // Declaration des méthodes 
   // Redifinition de la methode ngoninit 
@@ -27,8 +42,47 @@ export class ContactComponent implements OnInit {
     // On récupère le tableau d'objets dans le localstorage
     this.tabUsers = JSON.parse(localStorage.getItem("Users") || "[]");
 
-    // On récupère l'objet qui s'est connecter 
+    // On récupère l'objet qui s'est connecté 
     this.userConnect = this.tabUsers.find((element:any) => element.idUser == this.idUserConnect);
     console.log(this.userConnect);
+
+    // On stock la liste des contacts dans le tableau 
+    this.tabContactsUser = this.userConnect.contacts;
+
+    if(this.tabContactsUser != 0){
+      this.idLastContact = this.tabContactsUser[this.tabContactsUser.length -1].idContact;
+    }
+
+    // On vérifie si le tableau n'est pas vide 
+    // if(this.tabUsers.length != 0){
+    //   this.idLastContact = this.tabUsers[this.tabUsers.length -1].idUser;
+    // }
+  }
+
+
+  // Méthode pour afficher un sweetalert2 apres vérification 
+  verifierChamps(title:any, text:any, icon:any) {
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: icon
+    });
+  }
+
+  // Methode ajout contact
+  ajouterContact(){
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$/;
+    // Premiere vérification avec sweetalert 
+    if(this.nom == "" || this.prenom == "" || this.email == "" || this.telephone == "" || this.description == "" || this.imageUrl==""){
+      this.verifierChamps("Erreur!", "Vueillez renseigner les champs", "error");
+    }
+
+    else if (!this.email.match(emailPattern)) {
+      // Vérifie si le format de l'email est correct 
+      this.verifierChamps("Erreur!", "Email invalide", "error");
+    }
+    else{
+      alert("Bon!!")
+    }
   }
 }
