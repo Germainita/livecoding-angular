@@ -48,15 +48,14 @@ export class ContactComponent implements OnInit {
 
     // On stock la liste des contacts dans le tableau 
     this.tabContactsUser = this.userConnect.contacts;
+    console.log(this.tabContactsUser)
 
-    if(this.tabContactsUser != 0){
+    if(this.tabContactsUser.length > 0){
+      console.log(this.tabContactsUser.length);
       this.idLastContact = this.tabContactsUser[this.tabContactsUser.length -1].idContact;
     }
 
-    // On vérifie si le tableau n'est pas vide 
-    // if(this.tabUsers.length != 0){
-    //   this.idLastContact = this.tabUsers[this.tabUsers.length -1].idUser;
-    // }
+    console.log(this.idLastContact)
   }
 
 
@@ -102,7 +101,13 @@ export class ContactComponent implements OnInit {
       this.tabContactsUser.push(contact);
       this.verifierChamps("Felicitation!", "Contact ajouté avec succes", "success");
 
+      // console.log(this.userConnect);
+      // On met à jour le tableau qui est stocké dans le localStorage 
+      localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+
+      console.log(this.tabContactsUser);
       console.log(this.userConnect);
+      console.log(this.tabUsers);
     }
   }
 }
