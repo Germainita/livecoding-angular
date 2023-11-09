@@ -363,6 +363,18 @@ export class AuthComponent implements OnInit{
     // 
   }
 
+  // Methode pour vider les champs de la connexion 
+  viderChampsCon(){
+    this.emailCon = "";
+    this.passwordCon = "";
+
+    this.verifEmailCon = "";
+    this.verifPasswordCon = "";
+
+    this.exactEmailCon = false;
+    this.exactPasswordCon = false;
+  }
+
   // Methode pour se connecter 
   connexion(){
     if(this.tabUsers.length == 0){
@@ -372,12 +384,12 @@ export class AuthComponent implements OnInit{
     // else if (this.exactEmail && this.exactPassword){
       // Retourne un objet s'il trouve dans le tableau tabUser un element qui a le meme email et le 
       // meme mot de passe que ce qui a été saisi par l'utilisateur 
-      this.userFound = this.tabUsers.find((element:any) => element.email == this.email && element.password == this.password);
+      this.userFound = this.tabUsers.find((element:any) => element.email == this.emailCon && element.password == this.passwordCon);
 
       if(this.userFound){
         // Le compte existe 
         this.verifierChamps("Félicitation!", "Authentifié avec succes", "success"); 
-        this.viderChamps(); 
+        this.viderChampsCon(); 
         // this.route.navigate()
         this.route.navigate(['contact', this.userFound.idUser]);
       }
