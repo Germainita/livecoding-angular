@@ -123,10 +123,6 @@ export class ContactComponent implements OnInit {
         title: "Felicitation!",
         text: "Contact créé avec succes",
         icon: "success",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
       });
       // On vide les champs 
       this.viderChapmsContact();
@@ -137,6 +133,80 @@ export class ContactComponent implements OnInit {
       console.log(this.userConnect);
       console.log(this.tabUsers);
     }
+  }
+
+  // Methode supprimer contact 
+  supprimerContact(paramContact:any){
+    Swal.fire({
+      title: "Etes-vous sur???",
+      text: "Vous allez supprimer le contact",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, je supprime!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        paramContact.etatContact = 0;
+        // On met à jour le tableau qui est stocké dans le localStorage 
+        localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+        this.verifierChamps("Contact supprimer!", "", "success");     
+        
+      }
+    });
+    // alert(paramContact.etatContact);
+    
+  }
+
+  // Methode pour restaure le contact 
+  restaurerContact(paramContact:any){
+    Swal.fire({
+      title: "Etes-vous sur???",
+      text: "Vous allez restaurer le contact",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, je restaure!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        paramContact.etatContact = 1;
+        // On met à jour le tableau qui est stocké dans le localStorage 
+        localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+        this.verifierChamps("Contact restauré!", "", "success");     
+        
+      }
+    });
+  }
+
+  // Methode pour supprimer définitivement un contact 
+  supprimerContactDefinitif(paramContact:any){
+    Swal.fire({
+      title: "Etes-vous sur???",
+      text: "Vous allez supprimer définitivement contact",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, je supprime!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        paramContact.etatContact = -1;
+        // On met à jour le tableau qui est stocké dans le localStorage 
+        localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+        this.verifierChamps("Contact restauré!", "", "success");     
+        
+      }
+    });
+  }
+
+  // Methode pour supprimer définitivement
+
+  // On affiche soit la liste des contacts soit les contacts de la corbeille 
+  listChoice : boolean = true;
+
+  listeChoiceFunction(){
+    this.listChoice = !this.listChoice;
   }
 }
 
