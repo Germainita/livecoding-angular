@@ -50,10 +50,7 @@ export class ContactComponent implements OnInit {
     this.tabContactsUser = this.userConnect.contacts;
     console.log(this.tabContactsUser)
 
-    if(this.tabContactsUser.length > 0){
-      console.log(this.tabContactsUser.length);
-      this.idLastContact = this.tabContactsUser[this.tabContactsUser.length -1].idContact;
-    }
+    
 
     console.log(this.idLastContact)
   }
@@ -66,6 +63,16 @@ export class ContactComponent implements OnInit {
       text: text,
       icon: icon
     });
+  }
+
+  // Methode pour vider les champs 
+  viderChapmsContact(){
+    this.nom = "",
+    this.prenom = "",
+    this.email = "",
+    this.telephone = "",
+    this.description = "",
+    this.imageUrl = ""
   }
 
   // Methode ajout contact
@@ -81,6 +88,16 @@ export class ContactComponent implements OnInit {
       this.verifierChamps("Erreur!", "Email invalide", "error");
     }
     else{
+      // On vérifie si le tableau n'est pas vide 
+      if(this.tabContactsUser.length){
+        console.warn("taille du tab");
+        this.idLastContact = this.tabContactsUser[this.tabContactsUser.length -1].idContact;
+        console.log(this.idLastContact)
+      }
+      else {
+        this.idLastContact = 0;
+        console.warn("idLastUser = 0")
+      }
       // Création de l'objet contact 
       let contact = {
         idContact: this.idLastContact + 1,
@@ -98,10 +115,21 @@ export class ContactComponent implements OnInit {
       }
 
       // On ajoute l'objet dans la liste des contacts
+      console.log(this.idLastContact);
       this.tabContactsUser.push(contact);
-      this.verifierChamps("Felicitation!", "Contact ajouté avec succes", "success");
 
-      // console.log(this.userConnect);
+      // Ferme le popup si on click sur Ok 
+      Swal.fire({
+        title: "Felicitation!",
+        text: "Contact créé avec succes",
+        icon: "success",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+      // On vide les champs 
+      this.viderChapmsContact();
       // On met à jour le tableau qui est stocké dans le localStorage 
       localStorage.setItem("Users", JSON.stringify(this.tabUsers));
 

@@ -43,7 +43,7 @@ export class AuthComponent implements OnInit{
 
   // Notre tableau d'objets utilisateurs récupéré à partir du localstorage
   tabUsers : any;
-  idLastUser: number = 0;
+  idLastUser: any;
 
   // Utilisateur trouvé 
   userFound:any;
@@ -63,18 +63,21 @@ export class AuthComponent implements OnInit{
 
   // Appel de la methode ngOnInit de l'interface oninit 
   ngOnInit() {
-    console.log(this.users);
+    // console.log(this.users);
     if(!localStorage.getItem("Users")){
       localStorage.setItem("Users", JSON.stringify(this.users));
     }
 
     // Renvoie un tableau de valuers ou un tableau vide 
-    this.tabUsers = JSON.parse(localStorage.getItem("Users") || "[]");    
+    this.tabUsers = JSON.parse(localStorage.getItem("Users") || "[]");  
+    // console.log(this.idLastUser);  
 
-    // On vérifie si le tableau n'est pas vide 
-    if(this.tabUsers.length != 0){
-      this.idLastUser = this.tabUsers[this.tabUsers.length -1].idUser;
-    }
+    
+
+    console.log(this.tabUsers);
+    console.log(this.tabUsers.length);
+    // this.idLastUser = this.tabUsers[this.tabUsers.length -1].idUser;
+    // console.log(this.idLastUser);
     
   }
 
@@ -253,6 +256,17 @@ export class AuthComponent implements OnInit{
     this.verifPasswordFonction();
     this.verifPasswordConfFonction();
 
+    // On vérifie si le tableau n'est pas vide 
+    if(this.tabUsers.length){
+      console.warn("taille du tab");
+      this.idLastUser = this.tabUsers[this.tabUsers.length -1].idUser;
+      console.log(this.idLastUser)
+    }
+    else {
+      this.idLastUser = 0;
+      console.warn("idLastUser = 0")
+    }
+
     // Si les champs sont exacts, on ajoute le compte dans le tableau localStorage
     if(this.exactNom && this.exactPrenom && this.exactEmail && this.exactPassword && this.exactPasswordConf){
       let user = {
@@ -263,6 +277,8 @@ export class AuthComponent implements OnInit{
         password:  this.password,
         contacts: []
       }
+
+      console.log(this.idLastUser);
       let userExist = this.tabUsers.find((elemt:any)=> elemt.email == this.email);
 
       if (userExist){
