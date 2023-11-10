@@ -1,5 +1,10 @@
 <div class="container">
     <h1 class=" text-center fw-bold my-4">❤😍Bienvenu {{userConnect.prenom}} {{userConnect.nom}} 😉😁😎!!!!!!! </h1>
+    <div class="input-group mb-3"   >
+        <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" [(ngModel)] = "filterValue" (input)="onSearch()">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+    </div>
+
     <div class="container-list-contact" *ngIf="listChoice">
         <!-- Button trigger modal pour ajouter un contact-->
         <button type="button" class="btn btn-primary me-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -7,11 +12,12 @@
         </button>
     
         <button type="button" class="btn btn-secondary" (click)="listeChoiceFunction()" > Corbeille </button>
+
     
         <h4 class="fw-bold mt-5">Liste des contacts</h4>
         
         <!-- Liste des contact  -->
-        <div class="liste-contact mt-5" *ngFor=" let contact of tabContactsUser">
+        <div class="liste-contact mt-5" *ngFor=" let contact of filteredElement">
             <div class="card mb-3" *ngIf="contact.etatContact == 1">
                 <div class="row g-0">             
                   <div class="col-md-6">
@@ -23,8 +29,9 @@
                       <p class="card-text">Telephone: {{contact.telephoneContact}}</p>
                       <p class="card-text">Email: {{contact.emailContact}} </p>
                       <p class="card-text">Description: {{contact.descriptionContact}}</p>
-                      <p class="card-text" *ngIf="contact.updateAt">Dernière modification: {{contact.updateAt | date:'medium'}} </p>
-                      <button class="btn btn-primary me-5"> Modifier</button>
+                      <p class="card-text">Créé le: {{contact.createAt | date:'dd/MM/yyyy à hh:mm' :'UTC'}}</p>
+                      <p class="card-text" *ngIf="contact.updateAt">Dernière modification: {{contact.updateAt |  date:'dd/MM/yyyy à hh:mm' :'UTC'}} </p>
+                      <button class="btn btn-primary me-5" data-bs-toggle="modal" data-bs-target="#modalMofierContact" (click)="chargerInfosContact(contact)"> Modifier</button>
                       <button class="btn btn-secondary" (click) = "supprimerContact(contact)"> Supprimer</button>
                     </div>
                   </div>
@@ -35,14 +42,14 @@
 
     <div class="container-corbeille" *ngIf="!listChoice">
         <!-- Button trigger modal pour ajouter un contact-->
-        <button type="button" class="btn btn-primary me-5"> Vider la corbeille </button>
+        <button type="button" class="btn btn-primary me-5" (click)="viderCorbeille()"> Vider la corbeille </button>
     
         <button type="button" class="btn btn-secondary" (click)="listeChoiceFunction()" > Liste contacts </button>
     
         <h4 class="fw-bold mt-5">Liste des contacts de la corbeille</h4>
         
         <!-- Liste des contact  -->
-        <div class="liste-contact mt-5" *ngFor=" let contact of tabContactsUser">
+        <div class="liste-contact mt-5" *ngFor=" let contact of filteredElement">
             <div class="card mb-3" *ngIf="contact.etatContact == 0">
                 <div class="row g-0">             
                   <div class="col-md-6">
@@ -104,8 +111,52 @@
             </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="ajouterContact()">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="viderChapmsContact()">Annuler</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="ajouterContact()">Confirmer</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Modal modifier un contact  -->
+<div class="modal fade" id="modalMofierContact" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modifier ce contact</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="" method="post">
+                <div class="mb-3">
+                    <label for="nameInput" class="form-label">Nom: </label>
+                    <input type="text" name="name" class="form-control" id="nameInput" [(ngModel)] = "nom">
+                </div>
+                <div class="mb-3">
+                    <label for="prenomInput" class="form-label">Prenom: </label>
+                    <input type="text" name="prenom" class="form-control" id="prenomInput" [(ngModel)]="prenom">
+                </div>
+                <div class="mb-3">
+                    <label for="emailInput" class="form-label">Adresse email:</label>
+                    <input type="email" name="email" class="form-control" id="emailInput" [(ngModel)] ="email">
+                </div>
+                <div class="mb-3">
+                    <label for="telephoneInput" class="form-label">Numero de téléphone: </label>
+                    <input type="tel" name="telephone" class="form-control" id="telephoneInput" [(ngModel)] ="telephone">
+                </div>
+                <div class="mb-3">
+                    <label for="descriptionInput" class="form-label">Description: </label>
+                    <textarea class="form-control" name="description" id="descriptionInput" rows="3" [(ngModel)] ="description"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="imageInput" class="form-label">Url de l'image: </label>
+                    <input type="text" name="image" class="form-control" id="imageInput" [(ngModel)] = "imageUrl" >
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="viderChapmsContact()">Annuler</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="modifierContact()">Modifier</button>
         </div>
       </div>
     </div>

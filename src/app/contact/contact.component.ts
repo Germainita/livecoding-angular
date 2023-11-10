@@ -29,6 +29,12 @@ export class ContactComponent implements OnInit {
   // Le tableau qui contient la liste des contacts de l'utiliateur qui s'est connecté 
   tabContactsUser:any;
 
+  //valeur du filter qui correspond a celui du champs recherche
+  filterValue = '';
+
+  //les element trouver
+  filteredElement:any;
+
   // Définition du constructeur 
   constructor (private route: ActivatedRoute){}
   // Attribut qui permet de récupérer l'identifiant de celui qui s'est connecté 
@@ -48,11 +54,16 @@ export class ContactComponent implements OnInit {
 
     // On stock la liste des contacts dans le tableau 
     this.tabContactsUser = this.userConnect.contacts;
-    console.log(this.tabContactsUser)
-
+    this.filteredElement = this.tabContactsUser;
     
+  }
 
-    console.log(this.idLastContact)
+  // Methode de recherche automatique 
+  onSearch(){
+    // Recherche se fait selon le nom ou le prenom 
+    this.filteredElement = this.tabContactsUser.filter(
+      (elt:any) => (elt?.nomContact.toLowerCase().includes(this.filterValue.toLowerCase())) || elt?.prenomContact.toLowerCase().includes(this.filterValue.toLowerCase())
+    );
   }
 
 
@@ -200,7 +211,68 @@ export class ContactComponent implements OnInit {
     });
   }
 
-  // Methode pour supprimer définitivement
+  // Methode pour supprimer vider la corbeille
+  viderCorbeille(){
+    Swal.fire({
+      title: "Etes-vous sur???",
+      text: "Vous allez vider la corbeille",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, je vide!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tabContactsUser.forEach((element:any) => {
+          if(element.etatContact == 0){
+            element.etatContact = -1;
+            // On met à jour le tableau qui est stocké dans le localStorage 
+            localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+            this.verifierChamps("Contact restauré!", "", "success");     
+          }
+        });
+        // paramContact.etatContact = -1;
+        
+        
+      }
+    });
+
+    
+  }
+
+  // Variable qui stockera le contact cliqué
+  currentContact: any;
+  // Methode pour charger les informations à modifier 
+  chargerInfosContact(paramContact:any){
+    this.currentContact = paramContact;
+    this.nom = paramContact.nomContact;
+    this.prenom = paramContact.prenomContact;
+    this.email = paramContact.emailContact;
+    this.telephone = paramContact.telephoneContact;
+    this.description = paramContact.descriptionContact;
+    this.imageUrl = paramContact.imageContact;
+  }
+
+  // Methode pour modifier le contact
+  modifierContact(){
+    this.currentContact.nomContact = this.nom;
+    this.currentContact.prenomContact = this.prenom;
+    this.currentContact.emailContact = this.email;
+    this.currentContact.telephoneContact = this.telephone;
+    this.currentContact.descriptionContact = this.description;
+    this.currentContact.imageContact = this.imageUrl;
+    
+    // La date de derniere modification
+    this.currentContact.updateAt = new Date();
+    // La personne qui a modifier le contact
+    this.currentContact.updateBy = this.userConnect.email; 
+    
+    // On met à jour le tableau qui est stocké dans le localStorage 
+    localStorage.setItem("Users", JSON.stringify(this.tabUsers));
+    this.verifierChamps("Mofication réussie!", "", "success"); 
+    this.viderChapmsContact();
+  } 
+ 
 
   // On affiche soit la liste des contacts soit les contacts de la corbeille 
   listChoice : boolean = true;
